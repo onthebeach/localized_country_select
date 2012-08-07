@@ -18,7 +18,15 @@
 # Code adapted from Rails' default +country_select+ plugin (previously in core)
 # See http://github.com/rails/country_select/tree/master/lib/country_select.rb
 #
+require 'rails' unless defined?(Rails)
+
 module LocalizedCountrySelect
+  class Railtie < Rails::Railtie
+    initializer "localized_country_select.load_locales_into_rails" do
+      I18n.load_path += Dir[ File.join(File.dirname(__FILE__), 'locale', '*.{rb,yml}') ]
+    end
+  end
+
   class << self
     # Returns array with codes and localized country names (according to <tt>I18n.locale</tt>)
     # for <tt><option></tt> tags
